@@ -1,0 +1,22 @@
+
+
+
+global t
+t=1
+
+def change_t():
+    global t
+    t=t+10
+    print(t)
+
+def change_ta():
+    global t
+    t=t+10
+    print(t)        
+
+
+print(t)
+change_t()
+print(t)
+change_ta()
+print(t)    
