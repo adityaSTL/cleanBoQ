@@ -441,8 +441,8 @@ def summarycalc(file1):
             first=math.floor((no+row-48)/10)
             temp=(chr(no+first))+ chr((no+row-48)%10+48)
             sheet2['B'+temp]=i[0]
-            sheet2['C'+temp]=i[0]
-            sheet2['D'+temp]=i[0]
+            sheet2['C'+temp]=i[1]
+            sheet2['D'+temp]=i[2]
             row+=1
 
         print(miss_lst)

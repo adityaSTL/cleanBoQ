@@ -21,6 +21,7 @@ pd.options.mode.chained_assignment = None
 
 
 def miss(drt):
+    #drt.to_csv('drtinfin.csv')
     try:
         fin5=0
         fin=0
@@ -74,12 +75,12 @@ def dam(drt):
         temp=0
         s=0  
         for i in range(len(drt)):
-            ch1=drt.loc[i,'Duct_dam_ch_from']
-            ch2=drt.loc[i,'Duct_dam_ch_to']
+            ch1=drt.loc[i,'Duct_dam_punct_loc_ch_from']
+            ch2=drt.loc[i,'Duct_dam_punct_loc_ch_to']
             if i!=(len(drt)-1):
-                ch3=drt.loc[i+1,'Duct_dam_ch_from']
+                ch3=drt.loc[i+1,'Duct_dam_punct_loc_ch_from']
 
-            temp=(drt.loc[i,'Duct_dam_ch_Length'])
+            temp=(drt.loc[i,'Duct_dam_punct_loc_Length'])
 
             if ch3==ch2:
                 s+=temp  
@@ -132,34 +133,36 @@ def scope(blo):
     return last_blow   
 
 def dit_len(drt):
-    print("starting dit len calc function")
-    a=(drt['Duct_miss_ch_Length']==0)
-    b=~(drt['Duct_miss_ch_Length'].astype(str).str.isdigit())
-    y=a+b
+    try:
+        print("starting dit len calc function")
+        a=(drt['Duct_miss_ch_Length']==0)
+        b=~(drt['Duct_miss_ch_Length'].astype(str).str.isdigit())
+        y=a+b
 
-    print("Dit length only miss",drt.loc[y,'Length'].sum()/1000)
-    c=(drt['Duct_dam_punct_loc_Length']==0)
-    d=~(drt['Duct_dam_punct_loc_Length'].astype(str).str.isdigit())
-    
-    z=c+d
+        print("Dit length only miss",drt.loc[y,'Length'].sum()/1000)
+        c=(drt['Duct_dam_punct_loc_Length']==0)
+        d=~(drt['Duct_dam_punct_loc_Length'].astype(str).str.isdigit())
+        
+        z=c+d
 
-    print("Dit length only dam",drt.loc[z,'Length'].sum()/1000)
+        print("Dit length only dam",drt.loc[z,'Length'].sum()/1000)
 
-    e=y*z
-    print("Dit length",drt.loc[e,'Length'].sum()/1000)
-    dit_len=drt.loc[e,'Length'].sum()
+        e=y*z
+        print("Dit length",drt.loc[e,'Length'].sum()/1000)
+        dit_len=drt.loc[e,'Length'].sum()
 
-    if np.isnan(dit_len):
-        dit_len=0   
+        if np.isnan(dit_len):
+            dit_len=0   
             
-    #except:
-    #dit_len=0    
+    except:
+        dit_len=0    
 
     return dit_len
 
 def drt_len(drt):
     try:
-        drt_len=drt['Len'].sum()
+        drt_len=drt['Length'].sum()
+        print("drt_len: ",drt_len)
         if np.isnan(drt_len):
            drt_len=0   
         
@@ -184,23 +187,23 @@ def filler(file1,file2):
         #blo.to_csv("blo1.csv")
         if len(blo)!=0:
             (blo,joint_closer)=Create_table.create_blo(blo)
-            blo.to_csv("blo.csv")
+            #blo.to_csv("blo.csv")
             
         drt=Extract.extract_drt(j)
         if len(drt)!=0:
             drt=Create_table.create_drt(drt)
             drt.reset_index(drop=True,inplace=True)
-            drt.to_csv("drt.csv")
+            #drt.to_csv("drt.csv")
 
         ot=Extract.extract_ot(j)
         if len(ot)!=0:
             ot=Create_table.create_ot(ot)
-            ot.to_csv("ot.csv")   
+            #ot.to_csv("ot.csv")   
 
         hdd=Extract.extract_hdd(j)
         if len(hdd)!=0:
             hdd=Create_table.create_hdd(hdd)
-            hdd.to_csv("hdd.csv") 
+            #hdd.to_csv("hdd.csv") 
 
         var='F'
         if no<=10:
@@ -245,7 +248,7 @@ def filler(file1,file2):
             sheet1[var+'22']=(scope(blo)-drt_len(drt))/1000
             sheet1[var+'99']=(dit_len(drt))/1000
             miss_tot,miss_bill=miss(drt)
-            dam_tot,dam_bill=miss(drt)
+            dam_tot,dam_bill=dam(drt)
             sheet1[var+'137']=(miss_tot+dam_tot)/1000
             sheet1[var+'138']=(miss_bill+dam_bill)/1000
    
