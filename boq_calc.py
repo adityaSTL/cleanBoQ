@@ -35,7 +35,13 @@ def miss(drt):
                 ch3=drt.loc[i+1,'Duct_miss_ch_from']
 
             temp=(drt.loc[i,'Duct_miss_ch_Length'])
-
+            """
+            try:
+                if np.isnan(drt.loc[i,'Duct_miss_ch_Length']) or temp==0:
+                    temp=abs(ch2-ch1)
+            except:
+                print()        
+            """
             if ch3==ch2:
                 s+=temp  
 
@@ -81,7 +87,13 @@ def dam(drt):
                 ch3=drt.loc[i+1,'Duct_dam_punct_loc_ch_from']
 
             temp=(drt.loc[i,'Duct_dam_punct_loc_Length'])
-
+            """
+            try:
+                if np.isnan(drt.loc[i,'Duct_dam_punct_loc_Length']) or temp==0:
+                    temp=abs(ch2-ch1)
+            except:
+                print()
+            """
             if ch3==ch2:
                 s+=temp  
 
@@ -161,7 +173,11 @@ def dit_len(drt):
 
 def drt_len(drt):
     try:
+
         drt_len=drt['Length'].sum()
+        if np.isnan(drt_len):
+            drt_len=drt['ch_to'].sum()-drt['ch_from'].sum()
+
         print("drt_len: ",drt_len)
         if np.isnan(drt_len):
            drt_len=0   
@@ -215,10 +231,44 @@ def filler(file1,file2):
             sheet1[var+'3']=info[:-5]
             #sheet1[var1+'4']='STATE'
             #sheet1[var+'4']='BBNL'
-            sheet1[var+'11']=(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'Total_cable_length'].sum())/1000
-            sheet1[var+'14']=(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'Total_cable_length'].sum())/1000
-            sheet1[var+'17']=(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'Total_cable_length'].sum())/1000
-            sheet1[var+'18']=(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'Total_cable_length'].sum())/1000
+            len_288=(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'Total_cable_length'].sum())
+            """
+            try:
+                if np.isnan(len_288) or len_288==0:
+                    len_288=(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'cable_len_start'].sum())
+            except:
+                print()
+            """    
+            len_144=(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'Total_cable_length'].sum())
+            """
+            try:
+                if np.isnan(len_144) or len_144==0:
+                    len_144=(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'cable_len_start'].sum())
+            except:
+                print()
+            """    
+            len_96=(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'Total_cable_length'].sum())
+            """
+            print("Keep eyes wide shut:",len_96,"np.isnan(len_96):",np.isnan(len_96))
+            try:
+                if np.isnan(len_96) or len_96==0:
+                    len_96=(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'cable_len_start'].sum())
+            except:
+                print()
+            """    
+            len_48=(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'Total_cable_length'].sum())
+            """
+            try:
+                if np.isnan(len_48) or len_48==0:
+                    len_48=(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'cable_len_start'].sum())
+            except:
+                print()
+            """    
+
+            sheet1[var+'11']=(len_288)/1000
+            sheet1[var+'14']=(len_144)/1000
+            sheet1[var+'17']=(len_96)/1000
+            sheet1[var+'18']=(len_48)/1000
 
 
         except:

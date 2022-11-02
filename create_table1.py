@@ -2,6 +2,11 @@ import numpy as np
 import pandas as pd
 from tkinter import messagebox
 
+
+
+
+
+
 class Create_table:
     def create_ot(ot):
         zone=''
@@ -9,30 +14,7 @@ class Create_table:
         to_gp=''
         span_id=''
 
-        """
-        for i in range(4,12):
-            if len(ot.columns)<i:
-                break
-            zone_mandal=ot.loc[4,ot.columns[i]]
-            # print(zone_mandal)
-            try:
-                zone=zone_mandal.split('/')[0]
-                mandal=zone_mandal.split('/')[1]
-                to_gp=zone_mandal.split('/')[2]
-            # 
-                # 
-            except:
-                print('Something')
-            
-            try:
-                span_id=ot.loc[6,ot.columns[i]]
-            except:
-                print('Problem in SpanID')
-            if len(zone)>0:
-                break
-        print(f'spanid is {span_id}')
-        ot=ot[10:]
-        """
+        
         ot.reset_index(drop=True,inplace=True)
         j=0
         columns_={}
@@ -124,6 +106,11 @@ class Create_table:
         df1['To_GP']=to_gp
         df1['Span_ID']=span_id  
         #print(df1)
+        df1.reset_index(drop=True,inplace=True)
+        for i in range(len(df1)):
+            if np.isnan(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
+                if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
+                    df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
         return df1
 
 
@@ -221,6 +208,14 @@ class Create_table:
         df1['Mandal_Name']=mandal
         df1['To_GP']=to_gp
         df1['Span_ID']=span_id
+        #df1=corrector(df1,'Chainage_From','Chainage_To','Length')
+
+        df1.reset_index(drop=True,inplace=True)
+        for i in range(len(df1)):
+            if np.isnan(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
+                if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
+                    df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
+        
         return df1
 
     def create_drt(drt):
@@ -304,13 +299,15 @@ class Create_table:
             if type(drt.loc[i,'Duct_dam_ch_from'])==int and type(drt.loc[i,'Duct_dam_ch_to'])==int:
                 drt.loc[i,'Ch_from']=drt.loc[i,'Duct_dam_ch_from']
                 drt.loc[i,'Ch_to']=drt.loc[i,'Duct_dam_ch_to']
-                drt.loc[i,'Length']=drt.loc[i,'Duct_dam_len']
+                drt.loc[i,'Len']=abs(drt.loc[i,'Duct_dam_ch_from']-drt.loc[i,'Duct_dam_ch_to'])
+                drt.loc[i,'Duct_dam_len']=abs(drt.loc[i,'Duct_dam_ch_from']-drt.loc[i,'Duct_dam_ch_to'])
 
         for i in range(len(drt)):
             if type(drt.loc[i,'Duct_miss_ch_from'])==int and type(drt.loc[i,'Duct_miss_ch_to'])==int:
                 drt.loc[i,'Ch_from']=drt.loc[i,'Duct_miss_ch_from']
                 drt.loc[i,'Ch_to']=drt.loc[i,'Duct_miss_ch_to']
-                drt.loc[i,'Length']=drt.loc[i,'Duct_miss_len']
+                drt.loc[i,'Len']=abs(drt.loc[i,'Duct_miss_ch_from']-drt.loc[i,'Duct_miss_ch_to'])
+                drt.loc[i,'Duct_miss_len']=abs(drt.loc[i,'Duct_miss_ch_from']-drt.loc[i,'Duct_miss_ch_to'])
 
         drt=remove_noise(drt)        
             
@@ -358,6 +355,13 @@ class Create_table:
         df1['Mandal_Name']=mandal
         df1['To_GP']=to_gp
         df1['Span_ID']=span_id
+
+        df1.reset_index(drop=True,inplace=True)
+        for i in range(len(df1)):
+            if np.isnan(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
+                if type(df1.loc[i,'ch_to'])==int and type(df1.loc[i,'ch_from'])==int:
+                    df1.loc[i,'Length']=abs(df1.loc[i,'ch_to']-df1.loc[i,'ch_from'])
+       
         return df1
 
     def create_blo(blo):
@@ -485,10 +489,24 @@ class Create_table:
         df1['Span_ID']=span_id
         #df1['size_of_ofc']=df1['size_of_ofc'].str.replace(' ','')
         #blo.to_csv('blo123.csv')
-        
+        #df1=corrector(df1,'Chainage_From','Chainage_To','Length')
+        #df1=corrector(df1,'cable_len_start','cable_len_end','Total_cable_length')
+        df1.reset_index(drop=True,inplace=True)
+        for i in range(len(df1)):
+            if (np.isnan(df1.loc[i,'Length'])) or (df1.loc[i,'Length']==0):
+                if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
+                    df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
+        df1.reset_index(drop=True,inplace=True)
+        #df1.to_csv("blo_c.csv")
+        for i in range(len(df1)):
+            if (np.isnan(df1.loc[i,'Total_cable_length'])) or (df1.loc[i,'Total_cable_length']==0):
+                if type(df1.loc[i,'cab_st'])==int and type(df1.loc[i,'cab_end'])==int:
+                    df1.loc[i,'Total_cable_length']=abs(df1.loc[i,'cab_end']-df1.loc[i,'cab_st'])            
+        df1.reset_index(drop=True,inplace=True)
+
         def generate_joint_closer(blow):
             joint_closer=[]
-            blow=blow.reset_index(drop=True)
+            blow=blow.reset_index(drop=True)   
             x=blow.apply(lambda row: row.astype(str).str.lower().str.replace(' ','').str.contains('jointclosure').any(),axis=0)
             
             

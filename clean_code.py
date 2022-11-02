@@ -109,7 +109,7 @@ def summary():
     print(1)    
 
 
-popuplabel = Label(popupRoot, text = 'BoQer Code V2.1',font = ("Times New Roman", 11)).grid(row=0,column=2)
+popuplabel = Label(popupRoot, text = 'BoQer Code V3.2',font = ("Times New Roman", 11)).grid(row=0,column=2)
 popupButton = Label(popupRoot, text = 'STL',bg='white',fg='blue',font = ("Times New Roman", 13,'bold'), anchor="e",justify=RIGHT).grid(row=0,column=3)
 popuplabel = Label(popupRoot, text = ' ',font = ("Times New Roman", 12)).grid(row=1,column=1)
 popuplabel = Label(popupRoot, text = 'Select the BoQ Format',font = ("Times New Roman", 12)).grid(row=2,column=1)
