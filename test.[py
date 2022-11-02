@@ -1,48 +1,14 @@
-#Importing all the libraries
-from tkinter import *
-from sys import exit
-from tkinter import filedialog
-import pandas as pd
 import numpy as np
-import os
-from extract import Extract
-from create_table1 import Create_table
-import openpyxl
-import matplotlib.pyplot as plt
-from openpyxl_image_loader import SheetImageLoader
-import os
-import os.path
-import tkinter
-import warnings
-from array import *
-import math
-warnings.simplefilter(action='ignore', category=FutureWarning)
-pd.options.mode.chained_assignment = None
-
-
-
-
-j=r"C:\Users\Aditya.gupta\Desktop\Test\KHM-CNG-7256-M-01-GR02-01.xlsx"
-print(j)
-
-blo=Extract.extract_blo(j)
-#blo.to_csv("blo1.csv")
-if len(blo)!=0:
-    (blo,joint_closer)=Create_table.create_blo(blo)
-    blo.to_csv("blo.csv")
-    
-drt=Extract.extract_drt(j)
-if len(drt)!=0:
-    drt=Create_table.create_drt(drt)
-    drt.reset_index(drop=True,inplace=True)
-    drt.to_csv("drt.csv")
-
-ot=Extract.extract_ot(j)
-if len(ot)!=0:
-    ot=Create_table.create_ot(ot)
-    ot.to_csv("ot.csv")   
-
-hdd=Extract.extract_hdd(j)
-if len(hdd)!=0:
-    hdd=Create_table.create_hdd(hdd)
-    #hdd.to_csv("hdd.csv") 
+test="abc"
+t="  "
+a=""
+b=12
+c="NA"
+d=np.nan
+test=t
+print("test: ",type(test)==int)
+print("t: ",t)
+print("a: ",a)
+print("b: ",b)
+print("c: ",c)
+print("d: ",d)

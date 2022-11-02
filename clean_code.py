@@ -61,6 +61,10 @@ def boq_checkup():
     top.title("Error Check-up Window")
     text_box = Text(top,height=50,width=200)
     text_box.pack(expand=True)
+
+
+
+    
     try:
         temp_logs=''
         superstring,temp_logs=check(file_mandal)
@@ -87,9 +91,12 @@ def boq_calc():
         logs= logs + temp_logs  + "\n" 
     except:
         logs= logs + "Red Flag: Could not complete BoQ Calculate Function. Issues Found!!"  + "\n" 
-      
     
-    #print(logs)
+    
+    print(logs)
+    textfile = open('all_logs.txt', 'w')
+    textfile.write(logs)
+    textfile.close()
     popupRoot.destroy()
 
 def summary():

@@ -107,10 +107,15 @@ class Create_table:
         df1['Span_ID']=span_id  
         #print(df1)
         df1.reset_index(drop=True,inplace=True)
-        for i in range(len(df1)):
-            if np.isnan(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
-                if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
-                    df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
+
+        try:
+            for i in range(len(df1)):
+                if pd.isnull(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
+                    if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
+                        df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
+        except:
+            print("Error in correction of OT")                
+        
         return df1
 
 
@@ -211,10 +216,15 @@ class Create_table:
         #df1=corrector(df1,'Chainage_From','Chainage_To','Length')
 
         df1.reset_index(drop=True,inplace=True)
-        for i in range(len(df1)):
-            if np.isnan(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
-                if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
-                    df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
+        
+        try:
+            for i in range(len(df1)):
+                if pd.isnull(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
+                    if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
+                        df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
+
+        except:
+            print("Problems in correction of HDD")                
         
         return df1
 
@@ -294,7 +304,7 @@ class Create_table:
             return drt.drop(index,axis=0)
         
         
-
+        drt.reset_index(drop=True,inplace=True)
         for i in range(len(drt)):
             if type(drt.loc[i,'Duct_dam_ch_from'])==int and type(drt.loc[i,'Duct_dam_ch_to'])==int:
                 drt.loc[i,'Ch_from']=drt.loc[i,'Duct_dam_ch_from']
@@ -302,6 +312,7 @@ class Create_table:
                 drt.loc[i,'Len']=abs(drt.loc[i,'Duct_dam_ch_from']-drt.loc[i,'Duct_dam_ch_to'])
                 drt.loc[i,'Duct_dam_len']=abs(drt.loc[i,'Duct_dam_ch_from']-drt.loc[i,'Duct_dam_ch_to'])
 
+        drt.reset_index(drop=True,inplace=True)
         for i in range(len(drt)):
             if type(drt.loc[i,'Duct_miss_ch_from'])==int and type(drt.loc[i,'Duct_miss_ch_to'])==int:
                 drt.loc[i,'Ch_from']=drt.loc[i,'Duct_miss_ch_from']
@@ -357,10 +368,15 @@ class Create_table:
         df1['Span_ID']=span_id
 
         df1.reset_index(drop=True,inplace=True)
-        for i in range(len(df1)):
-            if np.isnan(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
-                if type(df1.loc[i,'ch_to'])==int and type(df1.loc[i,'ch_from'])==int:
-                    df1.loc[i,'Length']=abs(df1.loc[i,'ch_to']-df1.loc[i,'ch_from'])
+
+        try:
+            for i in range(len(df1)):
+                if pd.isnull(df1.loc[i,'Length']) or df1.loc[i,'Length']==0:
+                    if type(df1.loc[i,'ch_to'])==int and type(df1.loc[i,'ch_from'])==int:
+                        df1.loc[i,'Length']=abs(df1.loc[i,'ch_to']-df1.loc[i,'ch_from'])
+
+        except:
+            print("Problem in correction of DRT")                
        
         return df1
 
@@ -493,15 +509,20 @@ class Create_table:
         #df1=corrector(df1,'cable_len_start','cable_len_end','Total_cable_length')
         df1.reset_index(drop=True,inplace=True)
         for i in range(len(df1)):
-            if (np.isnan(df1.loc[i,'Length'])) or (df1.loc[i,'Length']==0):
+            if (pd.isnull(df1.loc[i,'Length'])) or (df1.loc[i,'Length']==0):
                 if type(df1.loc[i,'Chainage_To'])==int and type(df1.loc[i,'Chainage_From'])==int:
                     df1.loc[i,'Length']=abs(df1.loc[i,'Chainage_To']-df1.loc[i,'Chainage_From'])
         df1.reset_index(drop=True,inplace=True)
         #df1.to_csv("blo_c.csv")
-        for i in range(len(df1)):
-            if (np.isnan(df1.loc[i,'Total_cable_length'])) or (df1.loc[i,'Total_cable_length']==0):
-                if type(df1.loc[i,'cab_st'])==int and type(df1.loc[i,'cab_end'])==int:
-                    df1.loc[i,'Total_cable_length']=abs(df1.loc[i,'cab_end']-df1.loc[i,'cab_st'])            
+
+        try:
+            for i in range(len(df1)):
+                if (pd.isnull(df1.loc[i,'Total_cable_length'])) or (df1.loc[i,'Total_cable_length']==0):
+                    if type(df1.loc[i,'cab_st'])==int and type(df1.loc[i,'cab_end'])==int:
+                        df1.loc[i,'Total_cable_length']=abs(df1.loc[i,'cab_end']-df1.loc[i,'cab_st'])            
+
+        except:
+            print("problems in correction of blowing")                
         df1.reset_index(drop=True,inplace=True)
 
         def generate_joint_closer(blow):

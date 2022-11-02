@@ -196,119 +196,127 @@ def filler(file1,file2):
 
     no=0
     for info in sorted(os.listdir(mandal_file)):
-        j=mandal_file+info
-        print(j)
-
-        blo=Extract.extract_blo(j)
-        #blo.to_csv("blo1.csv")
-        if len(blo)!=0:
-            (blo,joint_closer)=Create_table.create_blo(blo)
-            #blo.to_csv("blo.csv")
-            
-        drt=Extract.extract_drt(j)
-        if len(drt)!=0:
-            drt=Create_table.create_drt(drt)
-            drt.reset_index(drop=True,inplace=True)
-            #drt.to_csv("drt.csv")
-
-        ot=Extract.extract_ot(j)
-        if len(ot)!=0:
-            ot=Create_table.create_ot(ot)
-            #ot.to_csv("ot.csv")   
-
-        hdd=Extract.extract_hdd(j)
-        if len(hdd)!=0:
-            hdd=Create_table.create_hdd(hdd)
-            #hdd.to_csv("hdd.csv") 
-
-        var='F'
-        if no<=10:
-            var=chr(ord(var)+2*no)
-        elif no>10:
-            var='A'+chr(ord(var)+2*no-26)
-
+        logs+='Opened the '+(mandal_file+info)+'\n'
         try:
-            sheet1[var+'3']=info[:-5]
-            #sheet1[var1+'4']='STATE'
-            #sheet1[var+'4']='BBNL'
-            len_288=(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'Total_cable_length'].sum())
-            """
+            j=mandal_file+info
+            print(j)
+
+            blo=Extract.extract_blo(j)
+            #blo.to_csv("blo1.csv")
+            if len(blo)!=0:
+                (blo,joint_closer)=Create_table.create_blo(blo)
+                #blo.to_csv("blo.csv")
+                
+            drt=Extract.extract_drt(j)
+            if len(drt)!=0:
+                drt=Create_table.create_drt(drt)
+                drt.reset_index(drop=True,inplace=True)
+                #drt.to_csv("drt.csv")
+
+            ot=Extract.extract_ot(j)
+            if len(ot)!=0:
+                ot=Create_table.create_ot(ot)
+                #ot.to_csv("ot.csv")   
+
+            hdd=Extract.extract_hdd(j)
+            if len(hdd)!=0:
+                hdd=Create_table.create_hdd(hdd)
+                #hdd.to_csv("hdd.csv") 
+
+            var='F'
+            if no<=10:
+                var=chr(ord(var)+2*no)
+            elif no>10:
+                var='A'+chr(ord(var)+2*no-26)
+
             try:
-                if np.isnan(len_288) or len_288==0:
-                    len_288=(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'cable_len_start'].sum())
+                sheet1[var+'3']=info[:-5]
+                #sheet1[var1+'4']='STATE'
+                #sheet1[var+'4']='BBNL'
+                len_288=(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'Total_cable_length'].sum())
+                """
+                try:
+                    if np.isnan(len_288) or len_288==0:
+                        len_288=(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['288F','288 F','288']),'cable_len_start'].sum())
+                except:
+                    print()
+                """    
+                len_144=(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'Total_cable_length'].sum())
+                """
+                try:
+                    if np.isnan(len_144) or len_144==0:
+                        len_144=(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'cable_len_start'].sum())
+                except:
+                    print()
+                """    
+                len_96=(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'Total_cable_length'].sum())
+                """
+                print("Keep eyes wide shut:",len_96,"np.isnan(len_96):",np.isnan(len_96))
+                try:
+                    if np.isnan(len_96) or len_96==0:
+                        len_96=(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'cable_len_start'].sum())
+                except:
+                    print()
+                """    
+                len_48=(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'Total_cable_length'].sum())
+                """
+                try:
+                    if np.isnan(len_48) or len_48==0:
+                        len_48=(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'cable_len_start'].sum())
+                except:
+                    print()
+                """    
+
+                sheet1[var+'11']=(len_288)/1000
+                sheet1[var+'14']=(len_144)/1000
+                sheet1[var+'17']=(len_96)/1000
+                sheet1[var+'18']=(len_48)/1000
+
+
             except:
-                print()
-            """    
-            len_144=(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'Total_cable_length'].sum())
-            """
-            try:
-                if np.isnan(len_144) or len_144==0:
-                    len_144=(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['144F','144 F','144']),'cable_len_start'].sum())
+                print("No such Blowing files..")
+
+            try:                
+                sheet1[var+'29']=(joint_closer.loc[joint_closer['cha_loop'].isin(['288F','288 F','288']),'chb_end'].sum())
+                sheet1[var+'32']=(joint_closer.loc[joint_closer['cha_loop'].isin(['144F','144 F','144']),'chb_end'].sum())
+                sheet1[var+'35']=(joint_closer.loc[joint_closer['cha_loop'].isin(['96F','96 F','96']),'chb_end'].sum())
+                sheet1[var+'36']=(joint_closer.loc[joint_closer['cha_loop'].isin(['48F','48 F','48']),'chb_end'].sum())
+
+                
             except:
-                print()
-            """    
-            len_96=(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'Total_cable_length'].sum())
-            """
-            print("Keep eyes wide shut:",len_96,"np.isnan(len_96):",np.isnan(len_96))
-            try:
-                if np.isnan(len_96) or len_96==0:
-                    len_96=(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['96F','96 F','96']),'cable_len_start'].sum())
+                print("No such Joint Closure files..")  
+
+            try:     
+                sheet1[var+'23']=(ot['Protect_Dwc'].sum())/1000
+                sheet1[var+'24']=(ot['Protect_Gi'].sum())/1000
+                sheet1[var+'25']=(ot['Rcc_Marker'].sum())
+                sheet1[var+'26']=(ot['Rcc_Chamber'].sum())
+    
+
             except:
-                print()
-            """    
-            len_48=(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'Total_cable_length'].sum())
-            """
-            try:
-                if np.isnan(len_48) or len_48==0:
-                    len_48=(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'cable_len_end'].sum())-(blo.loc[blo['size_of_ofc'].isin(['48F','48 F','48']),'cable_len_start'].sum())
+                print("No such OT files..")  
+
+            try:     
+                sheet1[var+'22']=(scope(blo)-drt_len(drt))/1000
+                sheet1[var+'99']=(dit_len(drt))/1000
+                miss_tot,miss_bill=miss(drt)
+                dam_tot,dam_bill=dam(drt)
+                sheet1[var+'137']=(miss_tot+dam_tot)/1000
+                sheet1[var+'138']=(miss_bill+dam_bill)/1000
+    
+
             except:
-                print()
-            """    
+                print("No such DRTT files..")           
 
-            sheet1[var+'11']=(len_288)/1000
-            sheet1[var+'14']=(len_144)/1000
-            sheet1[var+'17']=(len_96)/1000
-            sheet1[var+'18']=(len_48)/1000
-
-
+            xfile.save(filename="BOQ122.xlsx")
+            no+=1        
+            logs+='Successfully closed the '+(mandal_file+info)+'\n'
+        
         except:
-            print("No such Blowing files..")
-
-        try:                
-            sheet1[var+'29']=(joint_closer.loc[joint_closer['cha_loop'].isin(['288F','288 F','288']),'chb_end'].sum())
-            sheet1[var+'32']=(joint_closer.loc[joint_closer['cha_loop'].isin(['144F','144 F','144']),'chb_end'].sum())
-            sheet1[var+'35']=(joint_closer.loc[joint_closer['cha_loop'].isin(['96F','96 F','96']),'chb_end'].sum())
-            sheet1[var+'36']=(joint_closer.loc[joint_closer['cha_loop'].isin(['48F','48 F','48']),'chb_end'].sum())
-
-            
-        except:
-            print("No such Joint Closure files..")  
-
-        try:     
-            sheet1[var+'23']=(ot['Protect_Dwc'].sum())/1000
-            sheet1[var+'24']=(ot['Protect_Gi'].sum())/1000
-            sheet1[var+'25']=(ot['Rcc_Marker'].sum())
-            sheet1[var+'26']=(ot['Rcc_Chamber'].sum())
-   
-
-        except:
-            print("No such OT files..")  
-
-        try:     
-            sheet1[var+'22']=(scope(blo)-drt_len(drt))/1000
-            sheet1[var+'99']=(dit_len(drt))/1000
-            miss_tot,miss_bill=miss(drt)
-            dam_tot,dam_bill=dam(drt)
-            sheet1[var+'137']=(miss_tot+dam_tot)/1000
-            sheet1[var+'138']=(miss_bill+dam_bill)/1000
-   
-
-        except:
-            print("No such DRTT files..")           
-
-        xfile.save(filename="BOQ122.xlsx")
-        no+=1        
-    print(1)
+            logs+='Problem in the '+(mandal_file+info)+'\n'
+            #print("mandal_file+info")
+    
+    
     return logs
 
 """
